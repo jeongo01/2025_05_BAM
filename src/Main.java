@@ -10,7 +10,7 @@ public class Main {
 		
 		int lastArticleId = 0;  // 지역변수(main method)
 		
-		List<Article> aritcles = new ArrayList<>();
+		List<Article> articles = new ArrayList<>();
 		
 		while (true) {
 
@@ -38,7 +38,7 @@ public class Main {
 				
 				Article article = new Article(lastArticleId, title, body);
 				
-				aritcles.add(article);
+				articles.add(article);
 				
 				System.out.println(lastArticleId + "번 게시물이 생성되었습니다.");
 				
@@ -46,16 +46,40 @@ public class Main {
 			
 			else if (cmd.equals("article list")) {
 				
-				if (aritcles.size () == 0) {
+				if (articles.size () == 0) {
 					System.out.println("게시물이 존재하지 않습니다.");
 					continue;
 				}
 				
 				System.out.println("번호	/	제목");
-				for(int i = aritcles.size() - 1; i >= 0; i--) {
-					Article article = aritcles.get(i);
+				for(int i = articles.size() - 1; i >= 0; i--) {
+					Article article = articles.get(i);
 					System.out.printf("%d	/	%s\n", article.id, article.title);
 				}
+				
+			}
+			
+			else if (cmd.startsWith("article detail ")) {
+				String[] cmdBits = cmd.split(" ");
+				int id = Integer.parseInt(cmdBits[2]);
+				
+				Article foundArticle = null;
+				
+				for (Article article : articles) {
+					if (article.id == id) {
+						foundArticle = article;
+						break;					
+					}
+				}
+				
+				if (foundArticle == null) {
+					System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
+					continue;
+				}
+				
+				System.out.printf("번호 : %d\n", foundArticle.id);
+				System.out.printf("제목 : %s\n", foundArticle.title);
+				System.out.printf("내용 : %s\n", foundArticle.body);
 				
 			}
 			
