@@ -13,7 +13,7 @@ public class App {
 	int lastArticleId;
 
 	public App() {
-		this.articles  = new ArrayList<>();
+		this.articles = new ArrayList<>();
 		this.lastArticleId = 0;
 	}
 
@@ -57,16 +57,39 @@ public class App {
 
 			}
 
-			else if (cmd.equals("article list")) {
+			else if (cmd.startsWith("article list")) {
 
 				if (this.articles.size() == 0) {
 					System.out.println("게시물이 존재하지 않습니다.");
 					continue;
 				}
+				
 
+				String searchKeyword = cmd.substring("article list".length()).trim();
+
+				List<Article> printArticles = this.articles;
+
+				if (searchKeyword.length() > 0) {
+
+					System.out.println("검색어 : " + searchKeyword); // 디테일
+
+					printArticles = new ArrayList<>();
+
+					for (Article article : articles) {
+						if (article.title.contains(searchKeyword)) {
+							printArticles.add(article);
+						}
+					}
+
+					if (printArticles.size() == 0) {
+						System.out.println("검색결과가 없습니다.");
+						continue;
+					}
+				}
+				
 				System.out.println("번호	/	제목	/	작성일");
-				for (int i = this.articles.size() - 1; i >= 0; i--) {
-					Article article = this.articles.get(i);
+				for (int i = printArticles.size() - 1; i >= 0; i--) {
+					Article article = printArticles.get(i);
 					System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
 				}
 
@@ -139,7 +162,7 @@ public class App {
 	}
 
 	private Article getArticleById(int id) {
-		
+
 		for (Article article : this.articles) {
 			if (article.id == id) {
 				return article;
@@ -148,7 +171,7 @@ public class App {
 		return null;
 	}
 
-	private  void makeTestData() {
+	private void makeTestData() {
 		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), "제목1", "내용1"));
 		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), "제목2", "내용2"));
 		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), "제목3", "내용3"));
