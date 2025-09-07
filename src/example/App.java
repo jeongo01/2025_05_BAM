@@ -15,11 +15,11 @@ public class App {
 		MemberController memberController = new MemberController(sc);
 		ArticleController articleController = new ArticleController(sc);
 		articleController.makeTestData();
-		
+
 		while (true) {
 
 			System.out.printf("명령어) ");
-			String cmd = sc.nextLine().trim();  // cmd가 정의된 곳
+			String cmd = sc.nextLine().trim(); // cmd가 정의된 곳
 
 			if (cmd.length() == 0) {
 				System.out.println("명령어를 입력해주세요.");
@@ -31,6 +31,29 @@ public class App {
 				break;
 			}
 
+			String[] cmdBits = cmd.split(" ");
+			
+			if(cmdBits.length == 1) {
+				System.out.println("명령어를 확인하고 입력해주세요.");
+				continue;
+			}
+
+			String controllerName = cmdBits[0];
+			String methodName = cmdBits[1];
+
+			if (controllerName.equals("member")) {
+				memberController.doAction(cmd, methodName);
+			}
+			
+			else if (controllerName.equals("article")) {
+				articleController.doAction(cmd, methodName);
+			}
+			
+			else {
+				System.out.println("존재하지 않는 명령어입니다.");
+			}
+
+			
 			if (cmd.equals("member join")) {
 				memberController.doJoin();
 			}
@@ -40,19 +63,19 @@ public class App {
 			}
 
 			else if (cmd.startsWith("article list")) {
-				articleController.showList(cmd);
+				articleController.showList();
 			}
 
 			else if (cmd.startsWith("article detail ")) {
-				articleController.showDetail(cmd);
+				articleController.showDetail();
 			}
 
 			else if (cmd.startsWith("article modify ")) {
-				articleController.doModify(cmd);
+				articleController.doModify();
 			}
 
 			else if (cmd.startsWith("article delete ")) {
-				articleController.doDelete(cmd);
+				articleController.doDelete();
 			}
 
 			else {

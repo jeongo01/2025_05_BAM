@@ -18,6 +18,17 @@ public class MemberController {
 		this.lastMemberId = 0;
 		this.sc = sc;
 	}
+	
+	public void doAction(String cmd, String methodName) {
+		switch(methodName) {
+			case "join":
+			doJoin();
+			break;
+		default:
+			System.out.println("존재하지 않는 명령어 입니다.");
+			break;
+		}
+	}
 
 	public void doJoin() {
 
