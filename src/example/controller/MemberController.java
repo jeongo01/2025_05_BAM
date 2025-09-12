@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import example.dto.Article;
 import example.dto.Member;
 import example.util.Util;
 
@@ -40,6 +39,11 @@ public class MemberController extends Controller {
 	}
 
 	public void doJoin() {
+
+		if (isLogined()) {
+			System.out.println("로그아웃 후 이용해주세요.");
+			return;
+		}
 
 		lastMemberId++;
 
@@ -108,7 +112,7 @@ public class MemberController extends Controller {
 
 	private void doLogin() {
 
-		if (this.loginedMember != null) {
+		if (isLogined()) {
 			System.out.println("로그아웃 후 이용해주세요");
 			return;
 		}
@@ -122,7 +126,7 @@ public class MemberController extends Controller {
 				System.out.println("아이디를 입력해주세요.");
 				continue;
 			}
-			
+
 			break;
 		}
 
@@ -135,7 +139,7 @@ public class MemberController extends Controller {
 				System.out.println("비밀번호를 입력해주세요.");
 				continue;
 			}
-			
+
 			break;
 		}
 
@@ -155,20 +159,20 @@ public class MemberController extends Controller {
 
 		System.out.printf("%s회원님 환영합니다.\n", member.name);
 	}
-	
+
 	private void doLogout() {
-		
-		if(this.loginedMember == null) {
+
+		if (isLogined() == false) {
 			System.out.println("로그인 후 이용해주세요.");
 			return;
 		}
-		
+
 		this.loginedMember = null;
 		System.out.println("로그아웃 되었습니다.");
-	}	
+	}
 
 	private Member getMemberByLoginId(String loginId) {
-		
+
 		for (Member member : members) {
 			if (member.loginId.equals(loginId)) {
 				return member;
@@ -178,14 +182,18 @@ public class MemberController extends Controller {
 	}
 
 	private boolean isLoginIdDupChk(String loginId) {
-			
+
 		Member member = getMemberByLoginId(loginId);
-		
-			if (member != null) {
-				return true;
-			}
-			
+
+		if (member != null) {
+			return true;
+		}
+
 		return false;
+	}
+
+	private boolean isLogined() {
+		return this.loginedMember != null;
 	}
 
 	@Override
