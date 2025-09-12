@@ -16,6 +16,7 @@ public class ArticleController extends Controller{
 	public ArticleController(Scanner sc) {
 		this.articles = new ArrayList<>();
 		this.lastArticleId = 0;
+		this.sc = sc;
 		this.cmd = null;
 	}
 
@@ -46,7 +47,7 @@ public class ArticleController extends Controller{
 		}
 	}
 
-	public void doWrite() {
+	private void doWrite() {
 
 		lastArticleId++;
 
@@ -63,7 +64,7 @@ public class ArticleController extends Controller{
 
 	}
 
-	public void showList() {
+	private void showList() {
 
 		if (this.articles.size() == 0) {
 			System.out.println("게시물이 존재하지 않습니다.");
@@ -100,7 +101,7 @@ public class ArticleController extends Controller{
 
 	}
 
-	public void showDetail() {
+	private void showDetail() {
 
 		String[] cmdBits = cmd.split(" ");
 		
@@ -125,7 +126,7 @@ public class ArticleController extends Controller{
 
 	}
 
-	public void doModify() {
+	private void doModify() {
 
 		String[] cmdBits = cmd.split(" ");
 		
@@ -154,7 +155,7 @@ public class ArticleController extends Controller{
 		System.out.printf("%d번 게시물을 수정했습니다.\n", id);
 	}
 
-	public void doDelete() {
+	private void doDelete() {
 		String[] cmdBits = cmd.split(" ");
 		
 		if (cmdBits.length == 2) {
@@ -186,6 +187,7 @@ public class ArticleController extends Controller{
 		return null;
 	}
 
+	@Override
 	public void makeTestData() {
 		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), "제목1", "내용1"));
 		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), "제목2", "내용2"));

@@ -16,6 +16,7 @@ public class App {
 		MemberController memberController = new MemberController(sc);
 		ArticleController articleController = new ArticleController(sc);
 		articleController.makeTestData();
+		memberController.makeTestData();
 
 		while (true) {
 
@@ -41,7 +42,7 @@ public class App {
 
 			String controllerName = cmdBits[0];
 			String methodName = cmdBits[1];
-			
+
 			Controller controller = null;
 
 			if (controllerName.equals("member")) {
@@ -56,9 +57,9 @@ public class App {
 				System.out.println("존재하지 않는 명령어입니다.");
 				continue;
 			}
-			
+
 			controller.doAction(cmd, methodName);
-			
+
 		}
 
 		System.out.println("== 프로그램 끝 ==");
