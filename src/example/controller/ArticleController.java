@@ -26,6 +26,10 @@ public class ArticleController extends Controller{
 		
 		switch (methodName) {
 		case "write":
+			if (isLogined() == false) {
+				System.out.println("로그인 후 이용해주세요");
+				break;
+			}
 			doWrite();
 			break;
 		case "list":
@@ -35,9 +39,17 @@ public class ArticleController extends Controller{
 			showDetail();
 			break;
 		case "modify":
+			if (isLogined() == false) {
+				System.out.println("로그인 후 이용해주세요");
+				break;
+			}
 			doModify();
 			break;
 		case "delete":
+			if (isLogined() == false) {
+				System.out.println("로그인 후 이용해주세요");
+				break;
+			}
 			doDelete();
 			break;
 		default:
@@ -47,11 +59,6 @@ public class ArticleController extends Controller{
 	}
 
 	private void doWrite() {
-		
-		if (isLogined() == false) {
-			System.out.println("로그인 후 이용해주세요.");
-			return;
-		}
 
 		lastArticleId++;
 
@@ -148,6 +155,11 @@ public class ArticleController extends Controller{
 			System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
 			return;
 		}
+		
+		if(foundArticle.memberId != loginedMember.id) {
+			System.out.printf("%d번 게시물에 대한 권한이 없습니다.\n", id);
+			return;
+		}
 
 		System.out.printf("수정할 제목 : ");
 		String title = sc.nextLine();
@@ -161,6 +173,7 @@ public class ArticleController extends Controller{
 	}
 
 	private void doDelete() {
+		
 		String[] cmdBits = cmd.split(" ");
 		
 		if (cmdBits.length == 2) {
@@ -174,6 +187,11 @@ public class ArticleController extends Controller{
 
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
+			return;
+		}
+		
+		if (foundArticle.memberId != loginedMember.id) {
+			System.out.printf("%d번 게시물에 대한 권한이 없습니다\n", id);
 			return;
 		}
 
