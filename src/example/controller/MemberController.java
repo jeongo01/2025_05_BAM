@@ -11,13 +11,10 @@ public class MemberController extends Controller {
 
 	private List<Member> members;
 	private int lastMemberId;
-	private Member loginedMember;
 
 	public MemberController(Scanner sc) {
 		this.members = new ArrayList<>();
 		this.lastMemberId = 0;
-		this.sc = sc;
-		this.loginedMember = null;
 	}
 
 	@Override
@@ -155,7 +152,7 @@ public class MemberController extends Controller {
 			return;
 		}
 
-		this.loginedMember = member;
+		loginedMember = member;
 
 		System.out.printf("%s회원님 환영합니다.\n", member.name);
 	}
@@ -167,7 +164,7 @@ public class MemberController extends Controller {
 			return;
 		}
 
-		this.loginedMember = null;
+		loginedMember = null;
 		System.out.println("로그아웃 되었습니다.");
 	}
 
@@ -190,10 +187,6 @@ public class MemberController extends Controller {
 		}
 
 		return false;
-	}
-
-	private boolean isLogined() {
-		return this.loginedMember != null;
 	}
 
 	@Override

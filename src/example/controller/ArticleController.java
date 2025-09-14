@@ -16,7 +16,6 @@ public class ArticleController extends Controller{
 	public ArticleController(Scanner sc) {
 		this.articles = new ArrayList<>();
 		this.lastArticleId = 0;
-		this.sc = sc;
 		this.cmd = null;
 	}
 
@@ -48,6 +47,11 @@ public class ArticleController extends Controller{
 	}
 
 	private void doWrite() {
+		
+		if (isLogined() == false) {
+			System.out.println("로그인 후 이용해주세요.");
+			return;
+		}
 
 		lastArticleId++;
 
@@ -56,7 +60,7 @@ public class ArticleController extends Controller{
 		System.out.printf("내용 : ");
 		String body = sc.nextLine();
 
-		Article article = new Article(lastArticleId, Util.getDateStr(), title, body);
+		Article article = new Article(lastArticleId, Util.getDateStr(), loginedMember.id, title, body);
 
 		this.articles.add(article);
 
@@ -93,10 +97,10 @@ public class ArticleController extends Controller{
 			}
 		}
 
-		System.out.println("번호	/	제목	/	작성일");
+		System.out.println("번호	/	작성일	 /	 제목   /   작성자   ");
 		for (int i = printArticles.size() - 1; i >= 0; i--) {
 			Article article = printArticles.get(i);
-			System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
+			System.out.printf("%d	/	%s	/	%s\n", article.id, article.regDate, article.title, article.memberId);
 		}
 
 	}
@@ -121,6 +125,7 @@ public class ArticleController extends Controller{
 
 		System.out.printf("번호 : %d\n", foundArticle.id);
 		System.out.printf("번호 : %s\n", foundArticle.regDate);
+		System.out.printf("제목 : %s\n", foundArticle.memberId);
 		System.out.printf("제목 : %s\n", foundArticle.title);
 		System.out.printf("내용 : %s\n", foundArticle.body);
 
@@ -189,9 +194,9 @@ public class ArticleController extends Controller{
 
 	@Override
 	public void makeTestData() {
-		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), "제목1", "내용1"));
-		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), "제목2", "내용2"));
-		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), "제목3", "내용3"));
+		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), 2, "제목1", "내용1"));
+		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), 3, "제목2", "내용2"));
+		this.articles.add(new Article(++lastArticleId, Util.getDateStr(), 2, "제목3", "내용3"));
 		System.out.println("테스트용 게시물이 생성되었습니다.");
 	}
 
