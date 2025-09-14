@@ -40,8 +40,26 @@ public class App {
 				continue;
 			}
 
-			String controllerName = cmdBits[0];
-			String methodName = cmdBits[1];
+			String controllerName = cmdBits[0]; // 변수선언과 동시에 초기화
+			String methodName = cmdBits[1]; // 변수선언과 동시에 초기화
+
+			String actionName = controllerName + "/" + methodName;
+
+			switch (actionName) {
+				case "article/write":
+				case "article/modify":
+				case "article/delete":
+				case "member/join":
+					if (Controller.isLogined() == false) {
+						System.out.println("로그인 후 이용해주세요.");
+					}
+				case "member/login":
+				case "member/logout":
+					if (Controller.isLogined()) {
+						System.out.println("로그아웃 후 이용해주세요.");
+					}
+
+			}
 
 			Controller controller = null;
 
