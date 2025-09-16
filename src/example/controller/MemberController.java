@@ -2,16 +2,14 @@ package example.controller;
 
 import java.util.Scanner;
 
-import example.dao.MemberDao;
+import example.container.Container;
 import example.dto.Member;
 import example.util.Util;
 
 public class MemberController extends Controller {
-	
-	private MemberDao memberDao;
 
 	public MemberController(Scanner sc) {
-		this.memberDao = new MemberDao();
+		this.sc = sc;
 	}
 
 	@Override
@@ -34,7 +32,7 @@ public class MemberController extends Controller {
 
 	public void doJoin() {
 
-		int lastMemberId = this.memberDao.getLastMemberId();
+		int lastMemberId = Container.memberDao.getLastMemberId();
 		
 		String loginId = null;
 
@@ -47,7 +45,7 @@ public class MemberController extends Controller {
 				continue;
 			}
 
-			if (this.memberDao.isLoginIdDupChk(loginId)) {
+			if (Container.memberDao.isLoginIdDupChk(loginId)) {
 				System.out.printf("%s는 이미 사용중인아이디 입니다.\n", loginId);
 				continue;
 			}
@@ -93,7 +91,7 @@ public class MemberController extends Controller {
 
 		Member member = new Member(lastMemberId, Util.getDateStr(), loginId, loginPw, name);
 
-		this.memberDao.doJoin(member);
+		Container.memberDao.doJoin(member);
 
 		System.out.printf("%s 회원님이 가입되었습니다.\n", name);
 
@@ -132,7 +130,7 @@ public class MemberController extends Controller {
 			break;
 		}
 
-		Member member = memberDao.getMemberByLoginId(loginId);
+		Member member = Container.memberDao.getMemberByLoginId(loginId);
 
 		if (member == null) {
 			System.out.printf("%s는 존재하지 않는 아이디입니다.\n", loginId);
@@ -162,9 +160,9 @@ public class MemberController extends Controller {
 
 	@Override
 	public void makeTestData() {
-		this.memberDao.doJoin(new Member(this.memberDao.getLastMemberId(), Util.getDateStr(), "t1", "t1", "u1"));
-		this.memberDao.doJoin(new Member(this.memberDao.getLastMemberId(), Util.getDateStr(), "t2", "t2", "u1"));
-		this.memberDao.doJoin(new Member(this.memberDao.getLastMemberId(), Util.getDateStr(), "t3", "t3", "u1"));
+		Container.memberDao.doJoin(new Member(Container.memberDao.getLastMemberId(), Util.getDateStr(), "t1", "t1", "u1"));
+		Container.memberDao.doJoin(new Member(Container.memberDao.getLastMemberId(), Util.getDateStr(), "t2", "t2", "u1"));
+		Container.memberDao.doJoin(new Member(Container.memberDao.getLastMemberId(), Util.getDateStr(), "t3", "t3", "u1"));
 		System.out.println("테스트용 회원데이터가 생성되었습니다.");
 	}
 
