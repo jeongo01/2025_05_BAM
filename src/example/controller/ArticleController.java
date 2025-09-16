@@ -118,10 +118,12 @@ public class ArticleController extends Controller {
 			System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
 			return;
 		}
+		
+		String writerName = Container.memberDao.getWriterName(foundArticle.memberId);
 
 		System.out.printf("번호 : %d\n", foundArticle.id);
-		System.out.printf("번호 : %s\n", foundArticle.regDate);
-		System.out.printf("제목 : %s\n", foundArticle.memberId);
+		System.out.printf("작성일 : %s\n", foundArticle.regDate);
+		System.out.printf("작성자 : %s\n", writerName);
 		System.out.printf("제목 : %s\n", foundArticle.title);
 		System.out.printf("내용 : %s\n", foundArticle.body);
 
