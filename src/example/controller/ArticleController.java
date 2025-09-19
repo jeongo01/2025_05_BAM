@@ -6,15 +6,20 @@ import java.util.Scanner;
 
 import example.container.Container;
 import example.dto.Article;
+import example.service.ArticleService;
+import example.service.MemberService;
 import example.util.Util;
 
 public class ArticleController extends Controller {
-
 	private String cmd;
-
+	private ArticleService articleService;
+	private MemberService memberService;
+	
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
 		this.cmd = null;
+		this.articleService = Container.articleService;
+		this.memberService = Container.memberService;
 	}
 
 	@Override
@@ -45,7 +50,7 @@ public class ArticleController extends Controller {
 
 	private void doWrite() {
 
-		int lastArticleId = Container.articleDao.getLastId();
+		int lastArticleId = articleService.getLastId();
 
 		System.out.printf("제목 : ");
 		String title = sc.nextLine();
@@ -54,7 +59,7 @@ public class ArticleController extends Controller {
 
 		Article article = new Article(lastArticleId, Util.getDateStr(), loginedMember.id, title, body);
 
-		Container.articleDao.doWrite(article);
+		articleService.doWrite(article);
 
 		System.out.println(lastArticleId + "번 게시물이 생성되었습니다.");
 
@@ -62,7 +67,7 @@ public class ArticleController extends Controller {
 
 	private void showList() {
 
-		List<Article> articles = Container.articleDao.getArticles();
+		List<Article> articles = articleService.getArticles();
 
 		if (articles.size() == 0) {
 			System.out.println("게시물이 존재하지 않습니다.");
@@ -95,7 +100,7 @@ public class ArticleController extends Controller {
 		for (int i = printArticles.size() - 1; i >= 0; i--) {
 			Article article = printArticles.get(i);
 			
-			String writerName = Container.memberDao.getWriterName(article.memberId);
+			String writerName = memberService.getWriterName(article.memberId);
 			System.out.printf("%d	/	%s	/	%s\n", article.id, article.regDate, article.title, writerName);
 		}
 
@@ -112,14 +117,14 @@ public class ArticleController extends Controller {
 
 		int id = Integer.parseInt(cmdBits[2]);
 
-		Article foundArticle = Container.articleDao.getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
 			return;
 		}
 		
-		String writerName = Container.memberDao.getWriterName(foundArticle.memberId);
+		String writerName = memberService.getWriterName(foundArticle.memberId);
 
 		System.out.printf("번호 : %d\n", foundArticle.id);
 		System.out.printf("작성일 : %s\n", foundArticle.regDate);
@@ -140,7 +145,7 @@ public class ArticleController extends Controller {
 
 		int id = Integer.parseInt(cmdBits[2]);
 
-		Article foundArticle = Container.articleDao.getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
@@ -157,7 +162,7 @@ public class ArticleController extends Controller {
 		System.out.printf("수정할 내용 : ");
 		String body = sc.nextLine();
 
-		Container.articleDao.doModify(foundArticle, title, body);
+		articleService.doModify(foundArticle, title, body);
 
 		System.out.printf("%d번 게시물을 수정했습니다.\n", id);
 	}
@@ -173,7 +178,7 @@ public class ArticleController extends Controller {
 
 		int id = Integer.parseInt(cmdBits[2]);
 
-		Article foundArticle = Container.articleDao.getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시물이 존재하지 않습니다.\n", id);
@@ -185,16 +190,16 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		Container.articleDao.doDelete(foundArticle);
+		articleService.doDelete(foundArticle);
 		System.out.printf("%d 게시물을 삭제했습니다.\n", id);
 
 	}
 
 	@Override
 	public void makeTestData() {
-		Container.articleDao.doWrite(new Article(Container.articleDao.getLastId(), Util.getDateStr(), 2, "제목1", "내용1"));
-		Container.articleDao.doWrite(new Article(Container.articleDao.getLastId(), Util.getDateStr(), 3, "제목2", "내용2"));
-		Container.articleDao.doWrite(new Article(Container.articleDao.getLastId(), Util.getDateStr(), 2, "제목3", "내용3"));
+		articleService.doWrite(new Article(articleService.getLastId(), Util.getDateStr(), 2, "제목1", "내용1"));
+		articleService.doWrite(new Article(articleService.getLastId(), Util.getDateStr(), 3, "제목2", "내용2"));
+		articleService.doWrite(new Article(articleService.getLastId(), Util.getDateStr(), 2, "제목3", "내용3"));
 		System.out.println("테스트용 게시물이 생성되었습니다.");
 	}
 
